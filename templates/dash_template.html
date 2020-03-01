@@ -9,10 +9,21 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="{{url_for('index')}}">Home Page</a>
-      <a class="navbar-brand" href="{{url_for('/dash/')}}">Pokemon analysis</a>
+      <a class="navbar-brand" href="/">Home Page</a>
+      <a class="navbar-brand" href="/dash/">Pokemon analysis</a>
     </nav>
-    {% block content %}
-    {% endblock %}
+    <!-- First Grid -->
+<div class="w3-row-padding w3-padding-64 w3-container">
+  <div class="w3-content">
+    <div class="w3-twothird">
+      <h1>Pokemon attributes analysis</h1>
+
+      <h2>Attack and Defense Scatter plot</h2>
+      {%app_entry%}
+    </div>
+</div>
+  {%config%}
+  {%scripts%}
+  {%renderer%}
 </body>
 </html>
