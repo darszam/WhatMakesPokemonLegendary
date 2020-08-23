@@ -3,6 +3,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 import plotly.graph_objs as go
 import pandas as pd
+from pages.analysis_layout import *
 from dash.dependencies import Input, Output
 import json
 
@@ -22,63 +23,50 @@ def createdashboard(app):
 
 
 def createlayout(appdash):
-    appdash.layout = html.Div([
+    graph_01_legendary_pokemons_data = go.Scatter(
+        x=pokemon_dataset.loc[pokemon_dataset['is_legendary'] == True, 'attack'],
+        y=pokemon_dataset.loc[pokemon_dataset['is_legendary'] == True, 'defense'],
+        mode='markers'
+        )
 
-        html.Div([
-            html.Div(
+    graph_01_legendary_pokemons_layout = go.Layout(
+        title='Legendary Pokemons statistics',
+        xaxis={'title': 'Attack'},
+        yaxis={'title': 'Defense'},
+        hovermode='closest'
+    )
 
-                dcc.Graph(
-                    id='Legendary_Pokemons',
-                    figure={
-                        'data': [
-                            go.Scatter(x=pokemon_dataset.loc[pokemon_dataset['is_legendary'] == True, 'attack'],
-                                       y=pokemon_dataset.loc[pokemon_dataset['is_legendary'] == True, 'defense'],
-                                       mode='markers'
-                                       )
-                        ],
-                        'layout': go.Layout(
-                            title='Legendary Pokemons statistics',
-                            xaxis={'title': 'Attack'},
-                            yaxis={'title': 'Defense'},
-                            hovermode='closest'
-                        )
-                    }
-                 ),
-                style={'width':'70%', 'float':'left'}, className='eight columns'
-            ),
+    graph_01_legendary_pokemons_graph_object = dcc.Graph(
+                id='Legendary_Pokemons',
+                figure={
+                    'data': [graph_01_legendary_pokemons_data],
+                    'layout': graph_01_legendary_pokemons_layout
+                }
+            )
 
-            html.Div(html.Pre(id='hover-data', style={'paddingTop': 35}), className='four columns')
-        ],
-        className='row'
-        ),
+    graph_02_all_pokemons_data = go.Scatter(x=pokemon_dataset.loc[:, 'attack'],
+                                            y=pokemon_dataset.loc[:, 'defense'],
+                                            mode='markers'
+                                            )
 
-
-        html.Div([
-            html.Div(
-                dcc.Graph(
-                    id='All_Pokemons',
-                    figure={
-                        'data': [
-                            go.Scatter(x=pokemon_dataset.loc[:, 'attack'],
-                                       y=pokemon_dataset.loc[:, 'defense'],
-                                       mode='markers'
-                                       )
-                        ],
-                        'layout': go.Layout(
+    graph_02_all_pokemons_layout =  go.Layout(
                             title='All Pokemons statistics',
                             xaxis={'title': 'Attack'},
                             yaxis={'title': 'Defense'},
                             hovermode='closest'
                         )
-                    }), style={'width':'70%', 'float':'left'},
-                        className='eleven columns'
-                ),
-            html.Div(html.Pre(id='hover-data2', style={'paddingTop': 35}), className='four columns')
-        ],
-        className='row'
-        ),
 
+    graph_02_all_pokemons_graph_object = dcc.Graph(
+        id='All_Pokemons',
+        figure={
+            'data': [graph_02_all_pokemons_data],
+            'layout': graph_02_all_pokemons_layout
+        }
+    )
 
-    ])
+    main_layout['Legendary_Pokemons'] = graph_01_legendary_pokemons_graph_object
+
+    main_layout['All_Pokemons'] = graph_02_all_pokemons_graph_object
+
+    appdash.layout = main_layout
     return appdash
-
